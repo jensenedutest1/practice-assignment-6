@@ -38,7 +38,7 @@ Each method in LibraryService corresponds to an endpoint that needs to be create
 *e.g.* `GET http://localhost:8091/api/v1/artists?namesOnly=true`
 
 
-<br>
+<br><br>
 
 ```POST /artists```
 
@@ -48,7 +48,7 @@ Expects a JSON body representing an Artist object, containing only the artist's 
 *e.g.* `POST http://localhost:8091/api/v1/artists --body: { "name":"Kanye West" }`
 
 
-<br>
+<br><br>
 
 ```PUT /artists/{id}```
 >Updates an existing artist's properties (which is only the name).  
@@ -58,7 +58,7 @@ Expects a JSON body representing an Artist object, containing only the artist's 
 *e.g.* `PUT http://localhost:8091/api/v1/artists/2 --body: { "name":"Ye" }`
 
 
-<br>
+<br><br>
 
 ```DELETE /artists/{id}```
 >Removes an existing artist.  
@@ -66,12 +66,12 @@ The path contains a variable which is the artist's ID.
 *e.g.* `DELETE http://localhost:8091/api/v1/artists/2`
 
 
-<br>
+<br><br>
 
 ```GET /tracks```
 >Returns a list of all tracks.
 
-<br>
+<br><br>
 
 ```POST /artists/{artistId}/tracks```
 >Creates a new track for a specific artist.  
@@ -81,7 +81,7 @@ Expects a JSON body representing a Track object, containing name and year.
 *e.g.* `POST http://localhost:8091/api/v1/artists/2/tracks --body: { "name":"Heartless", "year": 2008 }`
 
 
-<br>
+<br><br>
 
 ```PUT /artists/{artistId}/tracks/{trackId}```
 >Updates an existing track for a specific artist.  
@@ -91,7 +91,7 @@ Expects a JSON body representing a Track object, containing name and year (both 
 *e.g.* `PUT http://localhost:8091/api/v1/artists/2/tracks/0 --body: { "name":"Heartless (Remix)", "year": 2010 }`
 
 
-<br>
+<br><br>
 
 ```DELETE /artists/{artistId}/tracks/{trackId}```
 >Removes an existing track from a specific artist.  
