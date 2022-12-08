@@ -3,6 +3,7 @@ package se.jensen.javacourse.week4.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,19 @@ public class LibraryService
         return db.readArtists();
     }
     
+    public List<String> getArtistsNamesOnly()
+    {
+        List<String> artistNames = new ArrayList<>();
+        for (Artist artist : db.readArtists().values())
+        {
+            artistNames.add(artist.getName());
+        }
+        return artistNames;
+    }
+    
+    /** Creates a new artist and returns 0 if no errors.
+     * If the name is null or empty, returns -2.
+     * If another artist already has that name, returns -1. */
     public int createArtist(Artist newArtist)
     {
         if (newArtist.getName() == null || newArtist.getName().isEmpty())
@@ -34,6 +48,10 @@ public class LibraryService
         return 0;
     }
     
+    /** Adds a new track to a specific artist and returns 0 if no errors.
+     * If the track name is null or empty, returns -3.
+     * If no artist exists with that id, returns -2.
+     * If the artist already has a track with that name, returns -1. */
     public int addTrack(Integer artistId, Track track)
     {
         String trackName = track.getName();
@@ -44,12 +62,15 @@ public class LibraryService
         
         if (artist.hasTrack(trackName)) return -1;
         
-//        track.setArtist(artist);
         artist.addTrack(track);
         db.saveArtist(artistId, artist);
         return 0;
     }
     
+    /** Updates the name of a specific artist, unless it's empty,
+     *  and returns 0 if no errors.
+     * If no artist exists with that id, returns -2.
+     * If another artist already has that name, returns -1. */
     public int updateArtist(Integer id, Artist newArtist)
     {
         Artist oldArtist = db.readArtistById(id);
@@ -62,6 +83,10 @@ public class LibraryService
         return 0;
     }
     
+    /** Updates an existing track of an existing artist
+     *  and returns 0 if no errors.
+     * If no artist exists with that id, returns -2.
+     * If the artist already has another track with that name, returns -1. */
     public int updateTrack(Integer artistId, Integer trackId, Track track)
     {
         Artist artist = db.readArtistById(artistId);
@@ -69,7 +94,6 @@ public class LibraryService
         
         if (artist.hasTrack(track.getName(), trackId)) return -1;
         
-//        track.setArtist(artist);
         int res = artist.updateTrack(trackId, track);
         if (res == 0)
             db.saveArtist(artistId, artist);
@@ -81,6 +105,10 @@ public class LibraryService
         db.removeArtist(id);
     }
     
+    /** Deletes an existing track of a specific artist
+     *  and returns 0 if no errors.
+     * If no artist exists with that id, returns -2.
+     * If no track exists with that id, returns -3. */
     public int deleteTrack(Integer artistId, Integer trackId)
     {
         Artist artist = db.readArtistById(artistId);
