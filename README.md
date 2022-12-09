@@ -117,5 +117,13 @@ You can utilize those return values to make your endpoints catch certain errors 
 ***
 
 
-You can join a public Postman Workspace with an Environment and a Collection of Requests that let you test your API conveniently.  
-Just follow the link and log in or create an account: https://app.getpostman.com/join-team?invite_code=96754eb5f76429577d5da86935e76113&target_code=523d6305255128288a7ce35390cf24ac
+You can also use my collection of ready-made Postman requests for testing your API, if you don’t feel like creating your own requests.  
+I’ve included two JSON files in the project, *PracticeAssignment4.postman_collection.json* and *PracticeAssignment4.postman_environment.json*, which can be used to import the Postman Environment and Request Collection into your Postman.  
+Just open Postman,  
+click on **Import**,  
+select the two files,  
+click the other Import button that shows up,  
+and they’ll be imported into your current Workspace.  
+
+Lastly, you need to select the newly imported Environment:  
+in the top-right corner there is a control that says “No Environment”, so just click on that and select “ProjectAssignment4Environment”.
