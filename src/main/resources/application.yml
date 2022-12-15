@@ -1,8 +1,4 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/music-library
-    username: jensenyh
-    password: losenord
+# todo: define the datasource here (or in application.properties)
 
-server:
-  port: 8091
+
+# todo: specify the port number here (or in application.properties)
