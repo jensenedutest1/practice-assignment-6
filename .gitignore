@@ -1,6 +1,8 @@
 # db data
 db/data/*
 
+*.tmp
+
 *.dat
 *.docx
 
