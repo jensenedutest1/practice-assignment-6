@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/music-library
+    username: jensenyh
+    password: losenord
+
+server:
+  port: 8091

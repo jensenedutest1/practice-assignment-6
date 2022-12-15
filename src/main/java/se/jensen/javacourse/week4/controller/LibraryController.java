@@ -1,7 +1,6 @@
 package se.jensen.javacourse.week4.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +28,63 @@ public class LibraryController
     @GetMapping("/artists")
     public Object getArtists(HttpServletRequest req)
     {
+        String name = req.getParameter("name");
+        if (name != null && !name.isEmpty())
+            return libraryService.getArtistByName(name);
         boolean namesOnly = "true".equals(req.getParameter("namesOnly"));
         if (namesOnly)
             return libraryService.getArtistsNamesOnly();
         return libraryService.getArtists();
+    }
+    
+    @GetMapping("/artists/{id}")
+    public Object getArtist(@PathVariable("id") int id)
+    {
+        return libraryService.getArtistById(id);
+    }
+    
+    @PostMapping("/artists")
+    public ResponseEntity<String> postArtist(@RequestBody Artist artist)
+    {
+        int res = libraryService.createArtist(artist);
+        switch (res)
+        {
+            case 1:
+                return ResponseEntity.status(201).build();
+            case -1:
+                return ResponseEntity.status(403).body("Artist with that name already exists");
+            case -2:
+                return ResponseEntity.badRequest().body("Cannot create artist with empty name");
+            default:
+                return ResponseEntity.internalServerError().body("Server error, probably");
+        }
+    }
+    
+    @PutMapping("/artists/{id}")
+    public ResponseEntity<String> putArtist(@PathVariable("id") Integer id, @RequestBody Artist artist)
+    {
+        int res = libraryService.updateArtist(id, artist);
+        switch (res)
+        {
+            case 0:
+                return ResponseEntity.badRequest().body("No artist with that id exists");
+            case 1:
+                return ResponseEntity.ok().build();
+            case -1:
+                return ResponseEntity.status(403).body("Another artist with that name already exists");
+            case -3:
+                return ResponseEntity.badRequest().body("Cannot set empty name to artist");
+            default:
+                return ResponseEntity.internalServerError().body("Server error, probably");
+        }
+    }
+    
+    @DeleteMapping("/artists/{id}")
+    public ResponseEntity<Object> deleteArtist(@PathVariable("id") Integer id)
+    {
+        if (libraryService.deleteArtist(id) >= 0)
+            return ResponseEntity.ok().build();
+        return ResponseEntity.internalServerError().build();
     }
     
     @GetMapping("/tracks")
@@ -41,97 +93,73 @@ public class LibraryController
         return libraryService.getTracks();
     }
     
-    @PostMapping("/artists")
-    public ResponseEntity postArtist(@RequestBody Artist artist)
+    @GetMapping("/artists/{artistId}/tracks/{trackId}")
+    public ResponseEntity<Object> getTracks(@PathVariable("artistId") Integer artistId,
+                                 @PathVariable("trackId") Integer trackId)
     {
-        int res = libraryService.createArtist(artist);
-        switch (res)
-        {
-            default:
-            case 0:
-                return new ResponseEntity(HttpStatus.CREATED);
-            case -1:
-                return new ResponseEntity("Artist with that name already exists", HttpStatus.FORBIDDEN);
-            case -2:
-                return new ResponseEntity("Cannot create artist with empty name", HttpStatus.BAD_REQUEST);
-        }
+        Object res = libraryService.getTrack(artistId, trackId);
+        if (res instanceof Integer && (int) res == -2)
+            return ResponseEntity.badRequest().body("No artist with that id exists");
+        return ResponseEntity.ok().body(libraryService.getTrack(artistId, trackId));
     }
     
     @PostMapping("/artists/{artistId}/tracks")
-    public ResponseEntity postTrack(@PathVariable("artistId") Integer artistId,
+    public ResponseEntity<String> postTrack(@PathVariable("artistId") Integer artistId,
                                     @RequestBody Track track)
     {
         int res = libraryService.addTrack(artistId, track);
         switch (res)
         {
-            default:
-            case 0:
-                return new ResponseEntity(HttpStatus.CREATED);
+            case 1:
+                return ResponseEntity.status(201).build();
             case -1:
-                return new ResponseEntity("Track with that name already exists", HttpStatus.FORBIDDEN);
+                return ResponseEntity.status(403).body("Track with that name already exists");
             case -2:
-                return new ResponseEntity("No artist with that id exists", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
-                return new ResponseEntity("Cannot create track with empty name", HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    @PutMapping("/artists/{id}")
-    public ResponseEntity putArtist(@PathVariable("id") Integer id, @RequestBody Artist artist)
-    {
-        int res = libraryService.updateArtist(id, artist);
-        switch (res)
-        {
+                return ResponseEntity.badRequest().body("Cannot create track with empty name");
             default:
-            case 0:
-                return new ResponseEntity(HttpStatus.OK);
-            case -1:
-                return new ResponseEntity("Another artist with that name already exists", HttpStatus.FORBIDDEN);
-            case -2:
-                return new ResponseEntity("No artist with that id exists", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.internalServerError().body("Server error, probably");
         }
     }
     
     @PutMapping("/artists/{artistId}/tracks/{trackId}")
-    public ResponseEntity putTrack(@PathVariable("artistId") Integer artistId,
-                                   @PathVariable("trackId") Integer trackId,
-                                   @RequestBody Track track)
+    public ResponseEntity<String> putTrack(@PathVariable("artistId") Integer artistId,
+                                           @PathVariable("trackId") Integer trackId,
+                                           @RequestBody Track track)
     {
         int res = libraryService.updateTrack(artistId, trackId, track);
         switch (res)
         {
-            default:
             case 0:
-                return new ResponseEntity(HttpStatus.OK);
+                return ResponseEntity.badRequest().body("No track with that id exists");
+            case 1:
+                return ResponseEntity.ok().build();
             case -1:
-                return new ResponseEntity("Track with that name already exists", HttpStatus.FORBIDDEN);
+                return ResponseEntity.status(403).body("Track with that name already exists");
             case -2:
-                return new ResponseEntity("No artist with that id exists", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
-                return new ResponseEntity("No track with that id exists", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.badRequest().body("Cannot set empty name to track");
+            default:
+                return ResponseEntity.internalServerError().body("Server error, probably");
         }
     }
     
-    @DeleteMapping("/artists/{id}")
-    public void deleteArtist(@PathVariable("id") Integer id)
-    {
-        libraryService.deleteArtist(id);
-    }
-    
     @DeleteMapping("/artists/{artistId}/tracks/{trackId}")
-    public ResponseEntity deleteTrack(@PathVariable("artistId") Integer artistId,
+    public ResponseEntity<String> deleteTrack(@PathVariable("artistId") Integer artistId,
                                       @PathVariable("trackId") Integer trackId)
     {
         int res = libraryService.deleteTrack(artistId, trackId);
         switch (res)
         {
             default:
-            case 0:
-                return new ResponseEntity(HttpStatus.OK);
+            case 1:
+                return ResponseEntity.ok().build();
             case -2:
-                return new ResponseEntity("No artist with that id exists", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
-                return new ResponseEntity("No track with that id exists", HttpStatus.OK);
+                return ResponseEntity.badRequest().body("No track with that id exists");
         }
     }
 }
