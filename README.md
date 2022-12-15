@@ -18,7 +18,7 @@ Repository,
 - autowire the `jdbcTemplate` object in the Repository class,
 - and fill in the missing pieces in some of its methods.
 
-*You should not modify any of the other files.* You’re free to do so if you want to experiment, but this task is possible to complete by only working on `LibraryRepository`.
+*You should not modify any of the other files.* You’re free to do so if you want to experiment, but this task is possible to complete by only working on `LibraryRepository` and `application.yml`/`application.properties`.
 
 _Note_: the right dependencies are already set in the pom.
 
@@ -105,6 +105,11 @@ That means that the **url of the database** will be:
 
 <br>
 
+Running that script will also initialize the tables and create some artists and tracks. 
+The SQL script that does that is located in `/db/init.sql`, if you’re curious.
+
+<br>
+
 
 #### Note  
 If you're having trouble with the script and you know how to run a Docker container with the specs above, 
@@ -116,4 +121,4 @@ tables and some values, and that the data is persisted in `db/data/` even if you
 ### Postman collection
 
 
-This time again I've included my (slightly updated) Postman collection of requests so that you can test your application.
+This time again I've included my (slightly updated) Postman collection of requests so that you can test your API.
