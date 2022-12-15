@@ -73,6 +73,8 @@ Table `tracks`:
 To create and start a Docker container serving the database on localhost:5431,
 execute one of the following scripts, depending on your OS: `dockerize_win.sh` (Windows, from Git Bash) or `dockerize_mac.sh` (macOS or Linux, from Terminal).
 
+**_NOTE: You need to have Docker running on your computer before you execute it._**
+
 To run the script, open Git Bash or Terminal from ***this*** folder (the _project root_) and run the following command:
 
 On Windows:
