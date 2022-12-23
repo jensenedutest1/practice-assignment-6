@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.controller;
+package se.jensen.javacourse.week6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
-import se.jensen.javacourse.week4.model.Artist;
-import se.jensen.javacourse.week4.model.Track;
-import se.jensen.javacourse.week4.service.LibraryService;
+import se.jensen.javacourse.week6.model.Artist;
+import se.jensen.javacourse.week6.model.Track;
+import se.jensen.javacourse.week6.service.LibraryService;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -47,17 +48,15 @@ public class LibraryController
     public ResponseEntity<String> postArtist(@RequestBody Artist artist)
     {
         int res = libraryService.createArtist(artist);
-        switch (res)
-        {
-            case 1:
-                return ResponseEntity.status(201).build();
-            case -1:
-                return ResponseEntity.status(403).body("Artist with that name already exists");
-            case -2:
-                return ResponseEntity.badRequest().body("Cannot create artist with empty name");
-            default:
-                return ResponseEntity.internalServerError().body("Server error, probably");
-        }
+        if (res > 0)
+            return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
+                                                  .path("/{id}").buildAndExpand(res)
+                                                  .toUri()).body("New artist id: " + res);
+        if (res == -1)
+            return ResponseEntity.status(409).body("Artist with that name already exists");
+        if (res == -2)
+            return ResponseEntity.badRequest().body("Cannot create artist with empty name");
+        return ResponseEntity.internalServerError().body("Server error, probably");
     }
     
     @PutMapping("/artists/{id}")
@@ -71,7 +70,7 @@ public class LibraryController
             case 1:
                 return ResponseEntity.ok().build();
             case -1:
-                return ResponseEntity.status(403).body("Another artist with that name already exists");
+                return ResponseEntity.status(409).body("Another artist with that name already exists");
             case -3:
                 return ResponseEntity.badRequest().body("Cannot set empty name to artist");
             default:
@@ -113,7 +112,7 @@ public class LibraryController
             case 1:
                 return ResponseEntity.status(201).build();
             case -1:
-                return ResponseEntity.status(403).body("Track with that name already exists");
+                return ResponseEntity.status(409).body("Track with that name already exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
@@ -136,7 +135,7 @@ public class LibraryController
             case 1:
                 return ResponseEntity.ok().build();
             case -1:
-                return ResponseEntity.status(403).body("Track with that name already exists");
+                return ResponseEntity.status(409).body("Track with that name already exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:

@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.model;
+package se.jensen.javacourse.week6.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -37,5 +37,15 @@ public class Artist implements Serializable
     {
         track.setArtistId(id);
         tracks.put(track.getId(), track);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Artist{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tracks=" + tracks +
+                '}';
     }
 }

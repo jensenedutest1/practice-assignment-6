@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.service;
+package se.jensen.javacourse.week6.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week4.database.LibraryRepository;
-import se.jensen.javacourse.week4.model.Artist;
-import se.jensen.javacourse.week4.model.Track;
+import se.jensen.javacourse.week6.database.LibraryRepository;
+import se.jensen.javacourse.week6.model.Artist;
+import se.jensen.javacourse.week6.model.Track;
 
 @Service
 public class LibraryService
@@ -26,12 +26,12 @@ public class LibraryService
         return db.readArtistNames();
     }
     
-    public Object getArtistById(int id)
+    public Artist getArtistById(int id)
     {
         return db.readArtistById(id);
     }
     
-    public Object getArtistByName(String name)
+    public Artist getArtistByName(String name)
     {
         return db.readArtistByName(name);
     }

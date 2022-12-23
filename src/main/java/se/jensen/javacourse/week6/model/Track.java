@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.model;
+package se.jensen.javacourse.week6.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

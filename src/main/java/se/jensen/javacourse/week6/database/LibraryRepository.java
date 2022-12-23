@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.database;
+package se.jensen.javacourse.week6.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week4.model.Artist;
-import se.jensen.javacourse.week4.model.Track;
+import se.jensen.javacourse.week6.model.Artist;
+import se.jensen.javacourse.week6.model.Track;
 
 @Repository
 public class LibraryRepository
@@ -118,7 +118,7 @@ public class LibraryRepository
         catch (DataIntegrityViolationException e)
         {
             // leave this as it is
-            if (e.toString().contains("artists_name_key"))
+            if (e.toString().contains("artists_name_key") || e.toString().contains("ARTISTS(NAME"))
                 return -1;
         }
         // leave this as it is
@@ -141,53 +141,15 @@ public class LibraryRepository
         catch (DataIntegrityViolationException e)
         {
             // leave this as it is
-            if (e.toString().contains("artists_name_key"))
+            if (e.toString().contains("artists_name_key") || e.toString().contains("ARTISTS(NAME"))
                 return -1;
         }
         return -3;
-    }
-    
-    public int insertTrack(int artistId, Track track)
-    {
-        // todo: write an SQL query that inserts a new row into the tracks table,
-        //  specifying values for the following three columns: name, year, and artist_id
-        String sql = "INSERT INTO tracks (name, year, artist_id) VALUES (?, ?, ?)";
-        try
-        {
-            return jdbcTemplate.update(sql, track.getName().trim(), track.getYear(), artistId);
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            if (e.toString().contains("tracks_name_artist_id_key"))
-                return -1;
-        }
-        return -4;
     }
     
     public int deleteArtist(int id)
     {
         return jdbcTemplate.update("DELETE FROM artists WHERE id = ?", id);
-    }
-    
-    public int updateTrack(int artistId, int trackId, Track track)
-    {
-        String sql = "UPDATE tracks SET name = ?, year = ? WHERE id = ? AND artist_id = ?";
-        try
-        {
-            return jdbcTemplate.update(sql, track.getName(), track.getYear(), trackId, artistId);
-        }
-        catch (DataIntegrityViolationException e)
-        {
-            if (e.toString().contains("tracks_name_artist_id_key"))
-                return -1;
-        }
-        return -3;
-    }
-    
-    public int deleteTrack(int artistId, int trackId)
-    {
-        String sql = "DELETE FROM tracks WHERE id = ? AND artist_id = ?";
-        return jdbcTemplate.update(sql, trackId, artistId);
     }
     
     public List<Track> readTracks()
@@ -217,5 +179,44 @@ public class LibraryRepository
         {
             return null;
         }
+    }
+    
+    public int insertTrack(int artistId, Track track)
+    {
+        // todo: write an SQL query that inserts a new row into the tracks table,
+        //  specifying values for the following three columns: name, year, and artist_id
+        String sql = "INSERT INTO tracks (name, \"year\", artist_id) VALUES (?, ?, ?)";
+        try
+        {
+            return jdbcTemplate.update(sql, track.getName().trim(), track.getYear(), artistId);
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            System.out.println("e = " + e);
+            if (e.toString().contains("tracks_name_artist_id_key") || e.toString().contains("TRACKS(NAME"))
+                return -1;
+        }
+        return -4;
+    }
+    
+    public int updateTrack(int artistId, int trackId, Track track)
+    {
+        String sql = "UPDATE tracks SET name = ?, \"year\" = ? WHERE id = ? AND artist_id = ?";
+        try
+        {
+            return jdbcTemplate.update(sql, track.getName().trim(), track.getYear(), trackId, artistId);
+        }
+        catch (DataIntegrityViolationException e)
+        {
+            if (e.toString().contains("tracks_name_artist_id_key") || e.toString().contains("TRACKS(NAME"))
+                return -1;
+        }
+        return -3;
+    }
+    
+    public int deleteTrack(int artistId, int trackId)
+    {
+        String sql = "DELETE FROM tracks WHERE id = ? AND artist_id = ?";
+        return jdbcTemplate.update(sql, trackId, artistId);
     }
 }
