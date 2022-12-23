@@ -19,26 +19,8 @@ public class LibraryRepository
     @Autowired
     JdbcTemplate jdbcTemplate;
     
-    public List<String> readArtistNames()
-    {
-        // NOTE: this method is only supposed to read the names
-        //  of all artists and return a list of Strings (the names)
-        
-        // todo: write an SQL query that selects only
-        //  the name column from the artists table
-        String sql = "SELECT name FROM artists";
-        
-        // you can use this RowMapper, no need to change it
-        RowMapper<String> rm = (rs, rowNum) -> rs.getString("name");
-        
-        // todo: execute the query and return whatever it returns
-        return jdbcTemplate.query(sql, rm);
-    }
-    
     public HashMap<Integer, Artist> readArtists()
     {
-        // NOTE: this method is complete, no need to touch it
-        
         RowMapper<Artist> rmA = (rs, rowNum) -> new Artist(
                 rs.getInt("id"),
                 rs.getString("name"));
@@ -57,90 +39,73 @@ public class LibraryRepository
         return artists;
     }
     
+    public List<String> readArtistNames()
+    {
+        String sql = "SELECT name FROM artists";
+        
+        RowMapper<String> rm = (rs, rowNum) -> rs.getString("name");
+        
+        return jdbcTemplate.query(sql, rm);
+    }
+    
     public Artist readArtistById(int id)
     {
-        // NOTE: this method is supposed to get one artist with
-        //  all their details and return an Artist object
-        
-        // todo: write an SQL query that selects all columns from the artists
-        //  table, but only for rows where id equals the method parameter 'id'
         String sql = "SELECT * FROM artists WHERE id = ?";
         
-        // todo: create a RowMapper that uses the
-        //  constructor Artist(int id, String name)
         RowMapper<Artist> rm = (rs, rowNum) -> new Artist(
                 rs.getInt("id"),
                 rs.getString("name"));
         try
         {
-            // leave this as it is
             return jdbcTemplate.queryForObject(sql, rm, id);
         }
         catch (EmptyResultDataAccessException e)
         {
-            // leave this as it is
             return null;
         }
     }
     
     public Artist readArtistByName(String name)
     {
-        // todo: write an SQL query that selects all columns from the artists table,
-        //  but only for rows where name equals the method parameter 'name'
         String sql = "SELECT * FROM artists WHERE name = ?";
         
-        // todo: create a RowMapper that uses the constructor Artist(int id, String name)
         RowMapper<Artist> rm = (rs, rowNum) -> new Artist(
                 rs.getInt("id"),
                 rs.getString("name"));
         try
         {
-            // leave this as it is
             return jdbcTemplate.queryForObject(sql, rm, name);
         }
         catch (EmptyResultDataAccessException e)
         {
-            // leave this as it is
             return null;
         }
     }
     
     public int insertArtist(String name)
     {
-        // todo: write an SQL query that inserts a new row into
-        //  the artists table, specifying the artist's name
         String sql = "INSERT INTO artists (name) VALUES (?)";
         try
         {
-            // todo: execute the query and return whatever it returns
             return jdbcTemplate.update(sql, name);
         }
         catch (DataIntegrityViolationException e)
         {
-            // leave this as it is
             if (e.toString().contains("artists_name_key") || e.toString().contains("ARTISTS(NAME"))
                 return -1;
         }
-        // leave this as it is
         return -3;
     }
     
     public int updateArtist(int id, Artist artist)
     {
-        // todo: write an SQL query that updates rows in the artists table
-        //  where the 'id' column equals the method parameter 'id'
-        //  and set the 'name' column to the method parameter 'name'
         String sql = "UPDATE artists SET name = ? WHERE id = ?";
         try
         {
-            // todo: execute the query and return its return value
-            // hint: the new 'name' value is inside the 'artist' object,
-            //  so get it from there
             return jdbcTemplate.update(sql, artist.getName(), id);
         }
         catch (DataIntegrityViolationException e)
         {
-            // leave this as it is
             if (e.toString().contains("artists_name_key") || e.toString().contains("ARTISTS(NAME"))
                 return -1;
         }
@@ -183,8 +148,6 @@ public class LibraryRepository
     
     public int insertTrack(int artistId, Track track)
     {
-        // todo: write an SQL query that inserts a new row into the tracks table,
-        //  specifying values for the following three columns: name, year, and artist_id
         String sql = "INSERT INTO tracks (name, \"year\", artist_id) VALUES (?, ?, ?)";
         try
         {
@@ -192,7 +155,6 @@ public class LibraryRepository
         }
         catch (DataIntegrityViolationException e)
         {
-            System.out.println("e = " + e);
             if (e.toString().contains("tracks_name_artist_id_key") || e.toString().contains("TRACKS(NAME"))
                 return -1;
         }
@@ -211,7 +173,7 @@ public class LibraryRepository
             if (e.toString().contains("tracks_name_artist_id_key") || e.toString().contains("TRACKS(NAME"))
                 return -1;
         }
-        return -3;
+        return -4;
     }
     
     public int deleteTrack(int artistId, int trackId)

@@ -46,6 +46,29 @@ public class LibraryService
         return db.insertArtist(artist.getName().trim());
     }
     
+    public int updateArtist(int id, Artist artist)
+    {
+        if (artist.getName() == null || artist.getName().isEmpty())
+            return -3;
+        return db.updateArtist(id, artist);
+    }
+    
+    public int deleteArtist(int id)
+    {
+        return db.deleteArtist(id);
+    }
+    
+    public List<Track> getTracks()
+    {
+        return db.readTracks();
+    }
+    
+    public Object getTrack(int artistId, int trackId)
+    {
+        if (db.readArtistById(artistId) == null) return -2;
+        return db.readTrack(trackId, artistId);
+    }
+    
     /** Adds a new track to a specific artist and returns 1.
      * If the track name is null or empty, returns -3.
      * If no artist exists with that id, returns -2.
@@ -59,24 +82,12 @@ public class LibraryService
         return db.insertTrack(artistId, track);
     }
     
-    public int updateArtist(int id, Artist artist)
-    {
-        if (artist.getName() == null || artist.getName().isEmpty())
-            return -3;
-        return db.updateArtist(id, artist);
-    }
-    
     public int updateTrack(int artistId, int trackId, Track track)
     {
         if (track.getName() == null || track.getName().isEmpty())
             return -3;
         if (db.readArtistById(artistId) == null) return -2;
         return db.updateTrack(artistId, trackId, track);
-    }
-    
-    public int deleteArtist(int id)
-    {
-        return db.deleteArtist(id);
     }
     
     /** Deletes an existing track of a specific artist
@@ -86,16 +97,5 @@ public class LibraryService
     {
         if (db.readArtistById(artistId) == null) return -2;
         return db.deleteTrack(artistId, trackId);
-    }
-    
-    public List<Track> getTracks()
-    {
-        return db.readTracks();
-    }
-    
-    public Object getTrack(int artistId, int trackId)
-    {
-        if (db.readArtistById(artistId) == null) return -2;
-        return db.readTrack(trackId, artistId);
     }
 }
