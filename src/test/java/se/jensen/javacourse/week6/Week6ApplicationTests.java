@@ -23,7 +23,7 @@
 //import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //
 //import se.jensen.javacourse.controller.week6.LibraryController;
-//import se.jensen.javacourse.database.week6.LibraryRepository;
+//import se.jensen.javacourse.repository.week6.LibraryRepository;
 //import se.jensen.javacourse.model.week6.Artist;
 //import se.jensen.javacourse.service.week6.LibraryService;
 //

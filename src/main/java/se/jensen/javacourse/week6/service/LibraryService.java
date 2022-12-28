@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week6.database.LibraryRepository;
+import se.jensen.javacourse.week6.repository.LibraryRepository;
 import se.jensen.javacourse.week6.model.Artist;
 import se.jensen.javacourse.week6.model.Track;
 

@@ -1,9 +1,6 @@
-package se.jensen.javacourse.week6;
+package se.jensen.javacourse.week6.model;
 
 import org.junit.jupiter.api.Test;
-
-import se.jensen.javacourse.week6.model.Artist;
-import se.jensen.javacourse.week6.model.Track;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

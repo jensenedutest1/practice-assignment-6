@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Artist implements Serializable
 {
@@ -48,4 +49,37 @@ public class Artist implements Serializable
                 ", tracks=" + tracks +
                 '}';
     }
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Artist artist = (Artist) o;
+        return id == artist.id && Objects.equals(name, artist.name) && Objects.equals(tracks, artist.tracks);
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, name, tracks);
+    }
+    //    @Override
+//    public boolean equals(Object o)
+//    {
+//        if (this == o)
+//            return true;
+//        if (o == null || getClass() != o.getClass())
+//            return false;
+//        Artist artist = (Artist) o;
+//        return id == artist.id && name.equals(artist.name) && tracks.equals(artist.tracks);
+//    }
+
+//    @Override
+//    public int hashCode()
+//    {
+//        return Objects.hash(id, name, tracks);
+//    }
 }

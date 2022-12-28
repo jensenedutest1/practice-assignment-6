@@ -1,33 +1,28 @@
-package se.jensen.javacourse.week6;
+package se.jensen.javacourse.week6.service;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week6.database.LibraryRepository;
 import se.jensen.javacourse.week6.model.Artist;
 import se.jensen.javacourse.week6.model.Track;
-import se.jensen.javacourse.week6.service.LibraryService;
+import se.jensen.javacourse.week6.repository.LibraryRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-@SpringBootTest
-public class ServiceUnitTests
+public class ServiceNoContextUnitTests
 {
-    @Autowired
-    LibraryService libraryService;
-    
-    @MockBean
-    LibraryRepository repo;
+    static LibraryService libraryService;
+    static LibraryRepository repo;
+    static Field dbField;
     
     final static String ARTIST_NAME = "Artist";
     final static String ARTIST_NAME_TWO = "Artist 2";
@@ -50,13 +45,24 @@ public class ServiceUnitTests
     final static List<Track> TRACKS = new ArrayList<>();
     
     @BeforeAll
-    public static void beforeAll()
+    public static void beforeAll() throws NoSuchFieldException
     {
+        libraryService = new LibraryService();
+        dbField = LibraryService.class.getDeclaredField("db");
+        dbField.setAccessible(true);
+        
         ARTISTS.put(ARTIST_ID, ARTIST_NOMINAL);
         ARTIST_NAMES.add(ARTIST_NAME);
         ARTIST_NAMES.add(ARTIST_NAME_TWO);
         TRACKS.add(TRACK_NOMINAL);
         TRACKS.add(new Track(4, "Track 2", 2002, 2));
+    }
+    
+    @BeforeEach
+    public void beforeEach() throws IllegalAccessException
+    {
+        repo = Mockito.mock(LibraryRepository.class);
+        dbField.set(libraryService, repo);
     }
     
     @Test
