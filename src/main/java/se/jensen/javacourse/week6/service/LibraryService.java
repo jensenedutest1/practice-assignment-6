@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.service;
+package se.jensen.javacourse.week6.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week4.database.LibraryRepository;
-import se.jensen.javacourse.week4.model.Artist;
-import se.jensen.javacourse.week4.model.Track;
+import se.jensen.javacourse.week6.repository.LibraryRepository;
+import se.jensen.javacourse.week6.model.Artist;
+import se.jensen.javacourse.week6.model.Track;
 
 @Service
 public class LibraryService
@@ -26,12 +26,12 @@ public class LibraryService
         return db.readArtistNames();
     }
     
-    public Object getArtistById(int id)
+    public Artist getArtistById(int id)
     {
         return db.readArtistById(id);
     }
     
-    public Object getArtistByName(String name)
+    public Artist getArtistByName(String name)
     {
         return db.readArtistByName(name);
     }
@@ -44,6 +44,29 @@ public class LibraryService
         if (artist.getName() == null || artist.getName().isEmpty())
             return -2;
         return db.insertArtist(artist.getName().trim());
+    }
+    
+    public int updateArtist(int id, Artist artist)
+    {
+        if (artist.getName() == null || artist.getName().isEmpty())
+            return -3;
+        return db.updateArtist(id, artist);
+    }
+    
+    public int deleteArtist(int id)
+    {
+        return db.deleteArtist(id);
+    }
+    
+    public List<Track> getTracks()
+    {
+        return db.readTracks();
+    }
+    
+    public Object getTrack(int artistId, int trackId)
+    {
+        if (db.readArtistById(artistId) == null) return -2;
+        return db.readTrack(trackId, artistId);
     }
     
     /** Adds a new track to a specific artist and returns 1.
@@ -59,24 +82,12 @@ public class LibraryService
         return db.insertTrack(artistId, track);
     }
     
-    public int updateArtist(int id, Artist artist)
-    {
-        if (artist.getName() == null || artist.getName().isEmpty())
-            return -3;
-        return db.updateArtist(id, artist);
-    }
-    
     public int updateTrack(int artistId, int trackId, Track track)
     {
         if (track.getName() == null || track.getName().isEmpty())
             return -3;
         if (db.readArtistById(artistId) == null) return -2;
         return db.updateTrack(artistId, trackId, track);
-    }
-    
-    public int deleteArtist(int id)
-    {
-        return db.deleteArtist(id);
     }
     
     /** Deletes an existing track of a specific artist
@@ -86,16 +97,5 @@ public class LibraryService
     {
         if (db.readArtistById(artistId) == null) return -2;
         return db.deleteTrack(artistId, trackId);
-    }
-    
-    public List<Track> getTracks()
-    {
-        return db.readTracks();
-    }
-    
-    public Object getTrack(int artistId, int trackId)
-    {
-        if (db.readArtistById(artistId) == null) return -2;
-        return db.readTrack(trackId, artistId);
     }
 }

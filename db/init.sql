@@ -3,12 +3,14 @@ DROP TABLE IF EXISTS tracks;
 
 CREATE TABLE artists (
 	id SERIAL PRIMARY KEY,
-	name TEXT NOT NULL UNIQUE
+	name TEXT NOT NULL UNIQUE,
+    CHECK (name <> '')
 );
 
 CREATE TABLE tracks (
 	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL,
+    CHECK (name <> ''),
 	year INT,
 	artist_id INT,
 	UNIQUE (name, artist_id),

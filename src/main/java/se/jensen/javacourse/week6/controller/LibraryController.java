@@ -1,4 +1,4 @@
-package se.jensen.javacourse.week4.controller;
+package se.jensen.javacourse.week6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
-import se.jensen.javacourse.week4.model.Artist;
-import se.jensen.javacourse.week4.model.Track;
-import se.jensen.javacourse.week4.service.LibraryService;
+import se.jensen.javacourse.week6.model.Artist;
+import se.jensen.javacourse.week6.model.Track;
+import se.jensen.javacourse.week6.service.LibraryService;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -47,17 +47,15 @@ public class LibraryController
     public ResponseEntity<String> postArtist(@RequestBody Artist artist)
     {
         int res = libraryService.createArtist(artist);
-        switch (res)
-        {
-            case 1:
-                return ResponseEntity.status(201).build();
-            case -1:
-                return ResponseEntity.status(403).body("Artist with that name already exists");
-            case -2:
-                return ResponseEntity.badRequest().body("Cannot create artist with empty name");
-            default:
-                return ResponseEntity.internalServerError().body("Server error, probably");
-        }
+        if (res == 1)
+            return ResponseEntity.status(201).body("Artist with name " + artist.getName() + " created");
+        if (res == -1)
+            return ResponseEntity.status(409).body("Artist with that name already exists");
+        if (res == -2)
+            return ResponseEntity.badRequest().body("Cannot create artist with empty name");
+        if (res == -3)
+            return ResponseEntity.badRequest().body("Empty request body");
+        return ResponseEntity.internalServerError().body("Server error, probably");
     }
     
     @PutMapping("/artists/{id}")
@@ -71,7 +69,7 @@ public class LibraryController
             case 1:
                 return ResponseEntity.ok().build();
             case -1:
-                return ResponseEntity.status(403).body("Another artist with that name already exists");
+                return ResponseEntity.status(409).body("Another artist with that name already exists");
             case -3:
                 return ResponseEntity.badRequest().body("Cannot set empty name to artist");
             default:
@@ -100,7 +98,7 @@ public class LibraryController
         Object res = libraryService.getTrack(artistId, trackId);
         if (res instanceof Integer && (int) res == -2)
             return ResponseEntity.badRequest().body("No artist with that id exists");
-        return ResponseEntity.ok().body(libraryService.getTrack(artistId, trackId));
+        return ResponseEntity.ok().body(res);
     }
     
     @PostMapping("/artists/{artistId}/tracks")
@@ -111,9 +109,9 @@ public class LibraryController
         switch (res)
         {
             case 1:
-                return ResponseEntity.status(201).build();
+                return ResponseEntity.status(201).body("Track with name " + track.getName() + " created");
             case -1:
-                return ResponseEntity.status(403).body("Track with that name already exists");
+                return ResponseEntity.status(409).body("Track with that name already exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
@@ -136,7 +134,7 @@ public class LibraryController
             case 1:
                 return ResponseEntity.ok().build();
             case -1:
-                return ResponseEntity.status(403).body("Track with that name already exists");
+                return ResponseEntity.status(409).body("Track with that name already exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
             case -3:
@@ -156,10 +154,10 @@ public class LibraryController
             default:
             case 1:
                 return ResponseEntity.ok().build();
+            case 0:
+                return ResponseEntity.badRequest().body("No track with that id exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
-            case -3:
-                return ResponseEntity.badRequest().body("No track with that id exists");
         }
     }
 }
