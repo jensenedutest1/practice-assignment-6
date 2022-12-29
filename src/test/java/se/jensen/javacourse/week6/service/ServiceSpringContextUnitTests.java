@@ -4,13 +4,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import se.jensen.javacourse.week6.ContextTests;
 import se.jensen.javacourse.week6.model.Artist;
 import se.jensen.javacourse.week6.model.Track;
 import se.jensen.javacourse.week6.repository.LibraryRepository;
@@ -19,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-public class ServiceSpringContextUnitTests extends ContextTests
+@SpringBootTest
+public class ServiceSpringContextUnitTests
 {
     @Autowired
     LibraryService libraryService;
@@ -76,7 +77,6 @@ public class ServiceSpringContextUnitTests extends ContextTests
     @Test
     public void getArtistsNamesOnly()
     {
-        
         Mockito.when(repo.readArtistNames()).thenReturn(ARTIST_NAMES);
         
         List<String> res = libraryService.getArtistsNamesOnly();

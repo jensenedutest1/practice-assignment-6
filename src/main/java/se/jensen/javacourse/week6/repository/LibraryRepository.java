@@ -163,30 +163,16 @@ public class LibraryRepository
     
     public int updateTrack(int artistId, int trackId, Track track)
     {
-        System.out.println("LibraryRepository.updateTrack");
-        System.out.println("artistId = " + artistId);
-        System.out.println("trackId = " + trackId);
-        System.out.println("track = " + track);
-        System.out.println("track.getName().trim() = " + track.getName().trim());
-        System.out.println("track.getYear() = " + track.getYear());
         String sql = "UPDATE tracks SET name = ?, \"year\" = ? WHERE id = ? AND artist_id = ?";
         try
         {
-            int res = jdbcTemplate.update(sql, track.getName().trim(), track.getYear(), trackId, artistId);
-            System.out.println("result of update = " + res);
-            return res;
+            return jdbcTemplate.update(sql, track.getName().trim(), track.getYear(), trackId, artistId);
         }
         catch (DataIntegrityViolationException e)
         {
-            System.out.println("specific exception " + e);
             if (e.toString().contains("tracks_name_artist_id_key") || e.toString().contains("TRACKS(NAME"))
                 return -1;
         }
-        catch (Exception e)
-        {
-            System.out.println("general exception " + e);
-        }
-        System.out.println("returning error -4");
         return -4;
     }
     

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -48,14 +47,14 @@ public class LibraryController
     public ResponseEntity<String> postArtist(@RequestBody Artist artist)
     {
         int res = libraryService.createArtist(artist);
-        if (res > 0)
-            return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
-                                                  .path("/{id}").buildAndExpand(res)
-                                                  .toUri()).body("New artist id: " + res);
+        if (res == 1)
+            return ResponseEntity.status(201).body("Artist with name " + artist.getName() + " created");
         if (res == -1)
             return ResponseEntity.status(409).body("Artist with that name already exists");
         if (res == -2)
             return ResponseEntity.badRequest().body("Cannot create artist with empty name");
+        if (res == -3)
+            return ResponseEntity.badRequest().body("Empty request body");
         return ResponseEntity.internalServerError().body("Server error, probably");
     }
     
@@ -99,7 +98,7 @@ public class LibraryController
         Object res = libraryService.getTrack(artistId, trackId);
         if (res instanceof Integer && (int) res == -2)
             return ResponseEntity.badRequest().body("No artist with that id exists");
-        return ResponseEntity.ok().body(libraryService.getTrack(artistId, trackId));
+        return ResponseEntity.ok().body(res);
     }
     
     @PostMapping("/artists/{artistId}/tracks")
@@ -110,7 +109,7 @@ public class LibraryController
         switch (res)
         {
             case 1:
-                return ResponseEntity.status(201).build();
+                return ResponseEntity.status(201).body("Track with name " + track.getName() + " created");
             case -1:
                 return ResponseEntity.status(409).body("Track with that name already exists");
             case -2:
@@ -155,10 +154,10 @@ public class LibraryController
             default:
             case 1:
                 return ResponseEntity.ok().build();
+            case 0:
+                return ResponseEntity.badRequest().body("No track with that id exists");
             case -2:
                 return ResponseEntity.badRequest().body("No artist with that id exists");
-            case -3:
-                return ResponseEntity.badRequest().body("No track with that id exists");
         }
     }
 }
