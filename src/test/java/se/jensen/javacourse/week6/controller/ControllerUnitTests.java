@@ -36,6 +36,7 @@ class ControllerUnitTests extends Tests
     
     final String baseUrl = "/api/v1/";
     
+    /** Makes sure that GET /api/v1/artists returns 200 and a JSON of all Artists. */
     @Test
     void getArtists() throws Exception
     {
@@ -48,6 +49,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).getArtists();
     }
     
+    /** Makes sure that GET /api/v1/artists/1 returns 200 and a specific predefined Artist. */
     @Test
     void getArtistIdOne() throws Exception
     {
@@ -60,28 +62,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).getArtistById(ART1_ID);
     }
     
-    @Test
-    void getArtistIdZero() throws Exception
-    {
-        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "artists/0"))
-                .andExpect(status().isOk()).andExpect(content().string(""));
-        
-        Mockito.verify(service, times(1)).getArtistById(0);
-    }
-    
-    @Test
-    void getArtistIdString() throws Exception
-    {
-        final String artistId = "x";
-        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "artists/" + artistId))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentTypeMismatchException))
-                .andExpect(result -> assertTrue(Objects.requireNonNull(result.getResolvedException()).getMessage()
-                                                        .contains("Failed to convert value of type")));
-        
-        Mockito.verify(service, never()).getArtistById(anyInt());
-    }
-    
+    /** Makes sure that posting a new Artist returns 201. */
     @Test
     void postArtistNewName() throws Exception
     {
@@ -97,6 +78,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).createArtist(ART_1);
     }
     
+    /** Makes sure that posting an Artist with an empty name returns 400 and a specific error message. */
     @Test
     void postArtistEmptyName() throws Exception
     {
@@ -113,6 +95,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).createArtist(any());
     }
     
+    /** Makes sure that posting an Artist with a null name returns 400 and a specific error message. */
     @Test
     void postArtistNullName() throws Exception
     {
@@ -129,6 +112,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).createArtist(any());
     }
     
+    /** Makes sure that posting an Artist with a duplicate name returns 409 and a specific error message. */
     @Test
     void postArtistDuplicateName() throws Exception
     {
@@ -145,6 +129,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).createArtist(any());
     }
     
+    /** Makes sure that PUT /api/v1/artists/1 with a unique new name updates the name of the first Artist and returns 200. */
     @Test
     void putArtistNewName() throws Exception
     {
@@ -160,6 +145,7 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, times(1)).updateArtist(ART1_ID, artistNewName);
     }
     
+    /** Makes sure that PUT /api/v1/artists/1 with an empty name doesn't update anything and returns 400 and a specific error message. */
     @Test
     void putArtistEmptyName() throws Exception
     {
@@ -176,14 +162,19 @@ class ControllerUnitTests extends Tests
         Mockito.verify(service, never()).createArtist(any());
     }
     
+    /** Makes sure that DELETE /api/v1/artists/1 deletes the first Artist and returns 200. */
     @Test
     void deleteArtist() throws Exception
     {
         Mockito.when(service.deleteArtist(ART1_ID)).thenReturn(1);
         
+        
+        // then this makes a mock DELETE request to /api/v1/artists/1 and expects a 200 status
         mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "artists/" + ART1_ID))
                 .andExpect(status().isOk());
         
+        
+        // and this verifies that service.deleteArtist(1) was called exactly once
         Mockito.verify(service, times(1)).deleteArtist(ART1_ID);
     }
     
