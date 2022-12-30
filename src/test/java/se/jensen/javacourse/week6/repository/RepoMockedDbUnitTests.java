@@ -89,112 +89,60 @@ public class RepoMockedDbUnitTests extends Tests
     @Test
     public void readArtists()
     {
-        assertThat(repo.readArtists()).isEqualTo(ARTISTS_MAP);
     }
     
     @Test
     public void readArtistNames()
     {
-        assertThat(repo.readArtistNames()).isEqualTo(ARTIST_NAMES);
     }
     
     @Test
     public void readArtistById()
     {
-        assertThat(repo.readArtistById(0)).isNull();
-        assertThat(repo.readArtistById(9)).isNull();
-        assertThat(repo.readArtistById(ART1_ID)).isEqualTo(ART_1);
-        assertThat(repo.readArtistById(ART2_ID)).isEqualTo(ART_2);
     }
     
     @Test
     public void readArtistByName()
     {
-        assertThat(repo.readArtistByName(ART1_NAME)).isEqualTo(ART_1);
-        assertThat(repo.readArtistByName("Nonexistent")).isNull();
-        assertThat(repo.readArtistByName(null)).isNull();
-        assertThat(repo.readArtistByName("")).isNull();
-        
     }
     
     @Test
     public void insertArtist()
     {
-        assertThat(repo.insertArtist(NAME_DUPLICATE)).isEqualTo(-1);
-        assertThat(repo.insertArtist("")).isEqualTo(-3);
-        assertThat(repo.insertArtist(null)).isEqualTo(-3);
-        assertThat(repo.insertArtist(ART1_NAME)).isEqualTo(1);
-        }
+    }
     
     @Test
     public void updateArtist()
     {
-        // non-existent id updates 0 rows
-        assertThat(repo.updateArtist(9, new Artist(9, "Whatever"))).isEqualTo(0);
-        // correct id and empty or null name returns -3
-        assertThat(repo.updateArtist(ART1_ID, new Artist(ART1_ID, ""))).isEqualTo(-3);
-        assertThat(repo.updateArtist(ART1_ID, new Artist(ART1_ID, null))).isEqualTo(-3);
-        // correct id and duplicate name returns -1
-        assertThat(repo.updateArtist(ART1_ID, new Artist(ART1_ID, NAME_DUPLICATE))).isEqualTo(-1);
-        // correct id and valid name updates 1 row
-        assertThat(repo.updateArtist(ART1_ID, new Artist(ART1_ID, ART1_NAME))).isEqualTo(1);
     }
     
     @Test
     public void deleteArtist()
     {
-        assertThat(repo.deleteArtist(0)).isEqualTo(0);
-        assertThat(repo.deleteArtist(9)).isEqualTo(0);
-        assertThat(repo.deleteArtist(ART1_ID)).isEqualTo(1);
-        assertThat(repo.deleteArtist(ART2_ID)).isEqualTo(1);
     }
     
     @Test
     public void readTracks()
     {
-        assertThat(repo.readTracks()).isEqualTo(TRACKS);
     }
     
     @Test
     public void readTrack()
     {
-        assertThat(repo.readTrack(9, 9)).isNull();
-        assertThat(repo.readTrack(0, ART1_ID)).isNull();
-        assertThat(repo.readTrack(TRK1_1_ID, 0)).isNull();
-        assertThat(repo.readTrack(TRK1_1_ID, ART1_ID)).isEqualTo(TRK1_1);
     }
     
     @Test
     public void insertTrack()
     {
-        assertThrows(NullPointerException.class, () ->
-                repo.insertTrack(ART1_ID, new Track(TRK1_1_ID, null, TRK1_1_YEAR, ART1_ID)));
-        
-        assertThat(repo.insertTrack(0, TRK1_1)).isEqualTo(0);
-        assertThat(repo.insertTrack(ART1_ID, TRK1_1)).isEqualTo(1);
-        assertThat(repo.insertTrack(ART1_ID, new Track(TRK1_1_ID, NAME_DUPLICATE, TRK1_1_YEAR, ART1_ID))).isEqualTo(-1);
-        assertThat(repo.insertTrack(ART1_ID, new Track(TRK1_1_ID, "", TRK1_1_YEAR, ART1_ID))).isEqualTo(-4);
     }
     
     @Test
     public void updateTrack()
     {
-        assertThrows(NullPointerException.class, () -> repo.updateTrack(ART1_ID, TRK1_1_ID, new Track(null, TRK1_1_YEAR)));
-        assertThat(repo.updateTrack(0, TRK1_1_ID, new Track(TRK1_2_NAME, TRK1_1_YEAR))).isEqualTo(0);
-        assertThat(repo.updateTrack(ART1_ID, 0, new Track(TRK1_2_NAME, TRK1_1_YEAR))).isEqualTo(0);
-        assertThat(repo.updateTrack(ART1_ID, TRK1_1_ID, new Track(TRK1_2_NAME, TRK1_1_YEAR))).isEqualTo(1);
-        assertThat(repo.updateTrack(ART1_ID, TRK1_1_ID, new Track(NAME_DUPLICATE, TRK1_1_YEAR))).isEqualTo(-1);
-        assertThat(repo.updateTrack(ART1_ID, TRK1_1_ID, new Track("", TRK1_1_YEAR))).isEqualTo(-3);
-        }
+    }
     
     @Test
     public void deleteTrack()
     {
-        assertThat(repo.deleteTrack(0, 0)).isEqualTo(0);
-        assertThat(repo.deleteTrack(0, TRK1_1_ID)).isEqualTo(0);
-        assertThat(repo.deleteTrack(9, TRK1_1_ID)).isEqualTo(0);
-        assertThat(repo.deleteTrack(ART1_ID, 0)).isEqualTo(0);
-        assertThat(repo.deleteTrack(ART1_ID, 9)).isEqualTo(0);
-        assertThat(repo.deleteTrack(ART1_ID, TRK1_1_ID)).isEqualTo(1);
     }
 }
