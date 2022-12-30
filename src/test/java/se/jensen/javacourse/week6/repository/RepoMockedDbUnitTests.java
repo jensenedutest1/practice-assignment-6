@@ -174,7 +174,7 @@ public class RepoMockedDbUnitTests extends Tests
         assertThat(repo.insertTrack(ART1_ID, TRK1_1)).isEqualTo(1);
         assertThat(repo.insertTrack(ART1_ID, new Track(TRK1_1_ID, NAME_DUPLICATE, TRK1_1_YEAR, ART1_ID))).isEqualTo(-1);
         assertThat(repo.insertTrack(ART1_ID, new Track(TRK1_1_ID, "", TRK1_1_YEAR, ART1_ID))).isEqualTo(-4);
-        }
+    }
     
     @Test
     public void updateTrack()

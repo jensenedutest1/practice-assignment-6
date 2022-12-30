@@ -22,9 +22,6 @@ public class RepoIntegrationTests extends ContextTests
     @Test
     public void readArtists()
     {
-        ARTISTS_MAP.put(ART1_ID, ART_1);
-        ARTISTS_MAP.put(ART2_ID, ART_2);
-        ARTISTS_MAP.put(ART3_ID, ART_3);
         assertThat(repo.readArtists()).isEqualTo(ARTISTS_MAP);
     }
     
