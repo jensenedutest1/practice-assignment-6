@@ -16,6 +16,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
+/**
+ * Testing the service layer by mocking the repository layer.
+ */
 public class ServiceSpringContextUnitTests extends ContextTests
 {
     @Autowired

@@ -11,6 +11,10 @@ import java.util.List;
 import se.jensen.javacourse.week6.model.Artist;
 import se.jensen.javacourse.week6.model.Track;
 
+/**
+ * This class only contains some constants and a @BeforeAll for initializing some objects.
+ * All test classes extend this class, either directly or through ContextTests.
+ */
 public class Tests
 {
     protected final ObjectMapper OM = new ObjectMapper();

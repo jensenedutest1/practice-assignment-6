@@ -6,8 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * This class starts a server and a Spring context on a random port.
+ * It also sets up the db tables and rows before EACH test method and
+ * tears them down after EACH test method.
+ * Some test classes inherit from this class, which means they also inherit
+ * the Spring context and the setup and tear-down of the database.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ContextTests extends Tests
+public abstract class ContextTests extends Tests
 {
     @Autowired
     protected JdbcTemplate jdbcTemplate;
