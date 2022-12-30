@@ -18,36 +18,21 @@ public class NaiveModelUnitTests
     @Test
     public void artistEmptyConstructorInitializesTracks()
     {
-        Artist artist = new Artist();
-        assertThat(artist.tracks).isNotNull();
     }
     
     @Test
     public void artistConstructorTwoInitializesTracksAndSetsFields()
     {
-        Artist artist = new Artist(artistId, artistName);
-        assertThat(artist.tracks).isNotNull();
-        assertThat(artist.getId()).isEqualTo(artistId);
-        assertThat(artist.getName()).isEqualTo(artistName);
     }
     
     @Test
     public void artistAddTrackAddsTrackAndArtistReferenceToTrack()
     {
-        Artist artist = new Artist(artistId, artistName);
-        Track track = new Track(trackName, trackYear);
-        artist.addTrack(track);
-        assertThat(artist.tracks).containsValue(track);
-        assertThat(track.getArtistId()).isEqualTo(artistId);
     }
     
     @Test
     public void artistAddTrackWithIdAddsTrackUnderCorrectKey()
     {
-        Artist artist = new Artist(artistId, artistName);
-        Track track = new Track(trackId, trackName, trackYear);
-        artist.addTrack(track);
-        assertThat(artist.tracks.get(trackId)).isEqualTo(track);
     }
     
     // Track.java only has basic constructors and getters and setters,

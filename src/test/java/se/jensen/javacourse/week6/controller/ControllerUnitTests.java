@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -44,13 +45,17 @@ class ControllerUnitTests extends Tests
     @Test
     void getArtists() throws Exception
     {
-        Mockito.when(service.getArtists()).thenReturn(ARTISTS_MAP);
+        // mock the Service method getArtists() so that it returns ARTISTS_MAP
+        // NOTE: ARTISTS_MAP is a constant defined in Tests.java, which is the parent of this class
+        // todo: mock it here
         
-        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "artists"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(OM.writeValueAsString(ARTISTS_MAP)));
+        // call mockMvc.perform() for GET /api/v1/artists and expect status OK and json content that corresponds to ARTISTS_MAP
+        // hint: to perform the get request, build it like so: MockMvcRequestBuilders.get(baseUrl + "artists") (refer to the PDF from class)
+        // hint: you can expect that json like so: .andExpect(content().json(OM.writeValueAsString(ARTISTS_MAP)))
+        // todo: make the mock get requests here
         
-        Mockito.verify(service, times(1)).getArtists();
+        // verify that service.getArtists() was called exactly once by calling Mockito.verify()
+        // todo: verify it here
     }
     
     /** Makes sure that GET /api/v1/artists/1 returns 200 and a specific predefined Artist. */
@@ -70,16 +75,19 @@ class ControllerUnitTests extends Tests
     @Test
     void postArtistNewName() throws Exception
     {
-        Mockito.when(service.createArtist(ART_1)).thenReturn(1);
+        // todo: mock service.createArtist(ART_1) so that it returns 1
         
-        mockMvc.perform(MockMvcRequestBuilders
-                                .post(baseUrl + "artists")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(OM.writeValueAsString(ART_1)))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("Artist with name " + ART_1.getName() + " created"));
         
-        Mockito.verify(service, times(1)).createArtist(ART_1);
+        // todo: make the mock POST request by calling mockMvc.perform and passing a RequestBuilder
+        // here's the RequestBuilder that you need to pass:
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post(baseUrl + "artists")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(OM.writeValueAsString(ART_1));
+        // so just call mockMvc.perform, pass the RequestBuilder, and then expect status().isCreated()
+        
+        
+        // todo: finally, verify that service.createArtists(ART_1) was called exactly once
     }
     
     /** Makes sure that posting an Artist with an empty name returns 400 and a specific error message. */
@@ -170,7 +178,9 @@ class ControllerUnitTests extends Tests
     @Test
     void deleteArtist() throws Exception
     {
-        Mockito.when(service.deleteArtist(ART1_ID)).thenReturn(1);
+        // first you need to mock service.deleteArtists(ART1_ID) so that it returns 1
+        // note: ART1_ID equals 1
+        // todo: mock it here
         
         
         // then this makes a mock DELETE request to /api/v1/artists/1 and expects a 200 status
