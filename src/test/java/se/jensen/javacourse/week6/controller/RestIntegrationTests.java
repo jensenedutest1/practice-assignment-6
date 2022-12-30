@@ -21,6 +21,10 @@ import se.jensen.javacourse.week6.model.Track;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * End-to-end tests: making http requests to the various endpoints with real data.
+ * Nothing is mocked, meaning all layers are in play, including an in-memory H2 database.
+ */
 public class RestIntegrationTests extends ContextTests
 {
     @LocalServerPort
@@ -604,24 +608,3 @@ public class RestIntegrationTests extends ContextTests
         assertThat(trackNames).hasSize(TRACKS.size());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

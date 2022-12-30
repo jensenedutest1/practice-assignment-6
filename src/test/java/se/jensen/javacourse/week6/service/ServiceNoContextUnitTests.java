@@ -16,17 +16,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
+/**
+ * There is no Spring context used in this class. Everything is completely mocked,
+ * which means only the basic functionality of the separate function is tested
+ * in complete isolation.
+ */
 public class ServiceNoContextUnitTests extends Tests
 {
     static LibraryService libraryService;
     static LibraryRepository repo;
     static Field dbField;
-    final static Artist ARTIST_DUPLICATE = new Artist(ART1_ID, NAME_DUPLICATE);
-    final static Artist ARTIST_EMPTY = new Artist(ART1_ID, "");
-    final static Artist ARTIST_NULL = new Artist(ART1_ID, null);
-    final static Track TRACK_DUPLICATE = new Track(NAME_DUPLICATE, TRK1_1_YEAR);
-    final static Track TRACK_EMPTY = new Track("", TRK1_1_YEAR);
-    final static Track TRACK_NULL = new Track(null, TRK1_1_YEAR);
     
     @BeforeAll
     public static void beforeAll() throws NoSuchFieldException, IllegalAccessException
@@ -80,19 +79,17 @@ public class ServiceNoContextUnitTests extends Tests
     @Test
     public void getArtistByName()
     {
-        final String nameNonexistent = "Nonexistent";
-        
         Mockito.when(repo.readArtistByName(ART1_NAME)).thenReturn(ART_1);
         Mockito.when(repo.readArtistByName("")).thenReturn(null);
         Mockito.when(repo.readArtistByName(null)).thenReturn(null);
         
         assertThat(libraryService.getArtistByName(ART1_NAME)).isEqualTo(ART_1);
         assertThat(libraryService.getArtistByName("")).isNull();
-        assertThat(libraryService.getArtistByName(nameNonexistent)).isNull();
+        assertThat(libraryService.getArtistByName(NAME_NONEXISTENT)).isNull();
         assertThat(libraryService.getArtistByName(null)).isNull();
         
         Mockito.verify(repo, times(1)).readArtistByName(ART1_NAME);
-        Mockito.verify(repo, times(1)).readArtistByName(nameNonexistent);
+        Mockito.verify(repo, times(1)).readArtistByName(NAME_NONEXISTENT);
         Mockito.verify(repo, times(1)).readArtistByName("");
         Mockito.verify(repo, times(1)).readArtistByName(null);
     }

@@ -26,6 +26,10 @@ import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Testing the REST Controller by making mock HTTP requests.
+ * LibraryService is mocked.
+ * */
 @WebMvcTest(LibraryController.class)
 class ControllerUnitTests extends Tests
 {

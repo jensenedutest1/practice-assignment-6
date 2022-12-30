@@ -23,6 +23,7 @@ public class Tests
     protected final static String ART3_NAME = "The Black Keys";
     protected final static String NEW_ARTIST_NAME = "Greta Van Fleet";
     protected final static String NAME_DUPLICATE = "Duplicate";
+    protected final static String NAME_NONEXISTENT = "Nonexistent";
     
     protected final static int TRK1_1_ID = 1;
     protected final static int TRK1_2_ID = 2;
@@ -54,6 +55,9 @@ public class Tests
     protected static Artist ART_3;
     protected final static Artist ARTIST_1_NO_TRACKS = new Artist(ART1_ID, ART1_NAME);
     protected final static Artist ARTIST_2_NO_TRACKS = new Artist(ART2_ID, ART2_NAME);
+    protected final static Artist ARTIST_DUPLICATE = new Artist(ART1_ID, NAME_DUPLICATE);
+    protected final static Artist ARTIST_EMPTY = new Artist(ART1_ID, "");
+    protected final static Artist ARTIST_NULL = new Artist(ART1_ID, null);
     
     protected final static Track TRK1_1 = new Track(TRK1_1_ID, TRK1_1_NAME, TRK1_1_YEAR, ART1_ID);
     protected final static Track TRK1_2 = new Track(TRK1_2_ID, TRK1_2_NAME, TRK1_2_YEAR, ART1_ID);
@@ -62,6 +66,9 @@ public class Tests
     protected final static Track TRK2_2 = new Track(TRK2_2_ID, TRK2_2_NAME, TRK2_2_YEAR, ART2_ID);
     protected final static Track TRK3_1 = new Track(TRK3_1_ID, TRK3_1_NAME, TRK3_1_YEAR, ART3_ID);
     protected final static Track TRK3_2 = new Track(TRK3_2_ID, TRK3_2_NAME, TRK3_2_YEAR, ART3_ID);
+    protected final static Track TRACK_DUPLICATE = new Track(NAME_DUPLICATE, TRK1_1_YEAR);
+    protected final static Track TRACK_EMPTY = new Track("", TRK1_1_YEAR);
+    protected final static Track TRACK_NULL = new Track(null, TRK1_1_YEAR);
     
     protected static HashMap<Integer, Artist> ARTISTS_MAP;
     protected static List<String> ARTIST_NAMES;

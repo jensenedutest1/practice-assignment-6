@@ -13,7 +13,7 @@ import se.jensen.javacourse.week6.model.Track;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/** This class tests LibraryRepository using an actual database. */
+/** This class tests LibraryRepository using an actual H2 database. */
 public class RepoIntegrationTests extends ContextTests
 {
     @Autowired
